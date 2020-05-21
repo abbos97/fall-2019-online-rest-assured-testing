@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -73,10 +74,63 @@ public class ORDSTestsDay4{
                 body("items[0].country_name", is("United States of America"));
 
         ///SECOND REQUEST
+        //accept(ContentType.JSON). - to request JSON from the web service.
         Response response = given().
                 accept(ContentType.JSON).
                 when().
                 get("/countries").prettyPeek();
+        String countryName = response.jsonPath().getString("items.find{it.country_id == 'US'}.country_name");
+        Map<String, Object> countryUS = response.jsonPath().get("items.find{it.country_id == 'US'}");
+        //find all country names from region 2
+        //collectionName.findAll{it.propertyName == 'Value'} -- to get collection objects where property equals to some value
+        //collectionName.find{it.propertyName == 'Value'} -- to object where property equals to some value
+
+        // to get collection properties where property equals to some value
+        //collectionName.findAll{it.propertyName == 'Value'}.propertyName
+        List<String> countryNames = response.jsonPath().getList("items.findAll{it.region_id == 2}.country_name");
+
+        System.out.println("Country name: " + countryName);
+        System.out.println(countryUS);
+        System.out.println(countryNames);
+
+        for (Map.Entry<String, Object> entry : countryUS.entrySet()) {
+            System.out.printf("key = %s, value = %s\n", entry.getKey(), entry.getValue());
+        }
     }
+
+    //let's find employee with highest salary. Use GPATH
+
+    @Test
+    public void getEmployeeTest(){
+        Response response=when().get("/employees").prettyPeek();
+        //collectionName.max{it.propertyName}
+        Map<String, ?>bestEmployee=response.jsonPath().get("items.max{it.salary}");
+        Map<String, ?>poorGuy=response.jsonPath().get("items.min{it.salary}");
+
+       int companiesPayroll=response.jsonPath().get("items.collect{it.salary}.sum()");
+
+        System.out.println(bestEmployee);
+        System.out.println(poorGuy);
+        System.out.println("Company's payroll:  " + companiesPayroll);
+    }
+    /**
+     * given path parameter is “/employees”
+     * when user makes get request
+     * then assert that status code is 200
+     * Then user verifies that every employee has positive salary
+     *
+     */
+
+    @Test
+    @DisplayName("Verify that every employee has positive salary")
+public void testSalary(){
+    when().
+            get("/employees").
+    then().
+            assertThat().
+            statusCode(200).
+            body("items.salary",everyItem(greaterThan(0))).
+            log().ifError();
+}
 
 }
