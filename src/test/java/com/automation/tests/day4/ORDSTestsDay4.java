@@ -132,5 +132,25 @@ public void testSalary(){
             body("items.salary",everyItem(greaterThan(0))).
             log().ifError();
 }
+/**
+ * given path parameter is “/employees/{id}”
+ * and path parameter is 101
+ * when user makes get request
+ * then assert that status code is 200
+ * and verifies that phone number is 515-123-4568
+ *
+ */
 
+
+@Test
+    public void verifyPhoneNumber(){
+    Response response=when().get("/employees/{id}",101).prettyPeek();
+    response.then().assertThat().statusCode(200);
+    String expected ="515-123-4568";
+    String actual=response.jsonPath().getString("phone_number").replace(".","-");
+
+    assertEquals(200,response.getStatusCode());
+    assertEquals(expected,actual);
+
+}
 }
