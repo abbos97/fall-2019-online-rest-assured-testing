@@ -2,6 +2,19 @@ package com.automation.pojos;
 
 import com.google.gson.annotations.SerializedName;
 
+
+/**
+ * This class represents spartan POJO
+ * Example of JSON response:
+ * {
+ *     "id": 393,               ->   private int id;
+ *     "name": "Michael Scott", ->   private String name;
+ *     "gender": "Male",        ->   private String gender;
+ *     "phone": 6969696969      ->   @SerializedName("phone") private long phoneNumber;
+ * }
+ *   SerializedName  - an annotation that indicates this member should be serialized to JSON with
+ *  * the provided name value as its field name.
+ */
 import java.util.Objects;
 
 public class Spartan {
