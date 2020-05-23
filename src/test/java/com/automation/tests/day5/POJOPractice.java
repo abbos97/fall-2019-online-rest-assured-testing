@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -86,4 +87,6 @@ public class POJOPractice {
          then().
                 assertThat().statusCode(200);//to ensure that user was deleted
     }
+
+
 }
