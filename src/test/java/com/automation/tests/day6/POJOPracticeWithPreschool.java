@@ -3,6 +3,7 @@ package com.automation.tests.day6;
 import com.automation.pojos.Employee;
 import com.automation.pojos.Link;
 import com.automation.pojos.Spartan;
+import com.automation.pojos.Student;
 import com.automation.utilities.ConfigurationReader;
 import com.google.gson.Gson;
 import io.restassured.RestAssured;
@@ -43,5 +44,11 @@ public class POJOPracticeWithPreschool {
                                       post("/student/create").prettyPeek();
         int studentId = response.jsonPath().getInt("studentId");
         System.out.println("Student id: " + studentId);
+    }
+    @Test
+    public void getStudentTest(){
+        Response response=get("/student/{id}",11613).prettyPeek();
+        Student student=response.jsonPath().getObject("students[0]",Student.class);
+        System.out.println(student);
     }
 }
