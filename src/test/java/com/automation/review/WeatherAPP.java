@@ -28,17 +28,31 @@ public class WeatherAPP {
         return woeid;
     }
 
+//    public static void printWeatherInfo(String woeid) {
+//        woeid = woeid.replaceAll("\\D", "");//to delete all non-digits
+//        Response response = get("{woeid}", woeid);
+//        List<String> weatherStateName = response.jsonPath().getList("consolidated_weather.weather_state_name");
+//        List<Double> temp = response.jsonPath().getList("consolidated_weather.the_temp");
+//        List<String> dates = response.jsonPath().getList("consolidated_weather.applicable_date");
+//        System.out.println("Here is the weather forecast for this week:");
+//        for (int i = 0; i < weatherStateName.size(); i++) {
+//            String date = dates.get(i);
+//            date = LocalDate.parse(date,  DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("MMM dd, yyyy"));
+//            System.out.printf("Date: %s, Weather state: %s, Temperature %s\n", date, weatherStateName.get(i), temp.get(i));
+//        }
+//    }
     public static void printWeatherInfo(String woeid) {
         woeid = woeid.replaceAll("\\D", "");//to delete all non-digits
         Response response = get("{woeid}", woeid);
         List<String> weatherStateName = response.jsonPath().getList("consolidated_weather.weather_state_name");
-        List<Double> temp = response.jsonPath().getList("consolidated_weather.the_temp");
+        List<Float> temp = response.jsonPath().getList("consolidated_weather.the_temp");
         List<String> dates = response.jsonPath().getList("consolidated_weather.applicable_date");
         System.out.println("Here is the weather forecast for this week:");
         for (int i = 0; i < weatherStateName.size(); i++) {
             String date = dates.get(i);
-            date = LocalDate.parse(date,  DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("MMM dd, yyyy"));
-            System.out.printf("Date: %s, Weather state: %s, Temperature %s\n", date, weatherStateName.get(i), temp.get(i));
+            float tempF = temp.get(i) * 9 / 5 + 32;
+            date = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd")).format(DateTimeFormatter.ofPattern("MMM dd, yyyy"));
+            System.out.printf("Date: %s, Weather state: %s, Temperature %.0f F\n", date, weatherStateName.get(i), tempF);
         }
     }
-}
+        }

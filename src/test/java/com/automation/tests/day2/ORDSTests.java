@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 
 public class ORDSTests {
 
-    String BASE_URL = "http://3.90.112.152:1000/ords/hr";
+    String BASE_URL = "http://54.152.21.73:1000/ords/hr";
 
     @Test
     @DisplayName("Get list of all employees")
