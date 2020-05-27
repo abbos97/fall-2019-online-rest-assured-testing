@@ -1,20 +1,7 @@
 package com.automation.office_hours;
 
-import com.automation.pojos.Employee;
-import com.automation.pojos.Link;
-import com.automation.pojos.Spartan;
-import com.automation.pojos.Student;
-import com.automation.utilities.ConfigurationReader;
-import com.google.gson.Gson;
-import com.google.gson.internal.bind.util.ISO8601Utils;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.http.Headers;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
