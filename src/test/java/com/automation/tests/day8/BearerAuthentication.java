@@ -11,44 +11,59 @@ import static org.hamcrest.Matchers.*;
 public class BearerAuthentication {
 
     @BeforeAll
-    public static void setup(){
+    public static void setup() {
         baseURI = "https://cybertek-reservation-api-qa.herokuapp.com/";
     }
+
     @Test
-    public void loginTest(){
-       Response response= given().
+    public void loginTest() {
+        Response response = given().
                 queryParam("email", "teacherva5@gmail.com").
                 queryParam("password", "maxpayne").
-        when().
+                when().
                 get("/sign").prettyPeek();
 
-       String token=response.jsonPath().getString("accessToken");
+        String token = response.jsonPath().getString("accessToken");
         System.out.println("Token :: " + token);
     }
+
     @Test
     @DisplayName("Negative test: attempt to retrieve list of rooms without authentication token")
-    public void getRoomTest(){
-        //422 OK. Because anyways we didn't get data
+    public void getRoomsTest() {
+        //422 ok. because anyways we didn't get data
         //but, we supposed to get 401 status code
         get("/api/rooms").prettyPeek().then().statusCode(401);
     }
 
     @Test
-    public void getRoomTest2(){
-        Response response=given().
+    public void getRoomsTest2() {
+        //1. Request: to get a token.
+        Response response = given().
                 queryParam("email", "teacherva5@gmail.com").
                 queryParam("password", "maxpayne").
                 when().
                 get("/sign");
-
         response.then().log().ifError();
-        String token=response.jsonPath().getString("accessToken");
 
-        Response response2=given().
-                                auth().oauth2(token).
+        String token = response.jsonPath().getString("accessToken");
+
+        Response response2 = given().
+                auth().oauth2(token).
                 when().
-                                get("/api/rooms").prettyPeek();
+                get("/api/rooms").prettyPeek();
     }
+
+    @Test
+    public void getAllTeamsTest(){
+        Response response = given().
+                header("Authorization", "Bearer "+getToken()).
+                when().
+                get("/api/teams").prettyPeek();
+
+        response.then().statusCode(200);
+    }
+
+
 
     public String getToken() {
         Response response = given().
@@ -57,10 +72,12 @@ public class BearerAuthentication {
                 when().
                 get("/sign");
         response.then().log().ifError();
+
         String token = response.jsonPath().getString("accessToken");
         System.out.println("Token :: " + token);
         return token;
     }
+
     public String getToken(String email, String password) {
         Response response = given().
                 queryParam("email", email).
@@ -68,6 +85,7 @@ public class BearerAuthentication {
                 when().
                 get("/sign");
         response.then().log().ifError();
+
         String token = response.jsonPath().getString("accessToken");
         System.out.println("Token :: " + token);
         return token;
